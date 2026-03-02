@@ -3,6 +3,7 @@
 ### Hexlet project
 
 [![Actions Status](https://github.com/Sherman330Turbo/devops-engineer-from-scratch-project-315/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Sherman330Turbo/devops-engineer-from-scratch-project-315/actions)
+[![main](https://github.com/Sherman330Turbo/devops-engineer-from-scratch-project-315/actions/workflows/main.yml/badge.svg)](https://github.com/Sherman330Turbo/devops-engineer-from-scratch-project-315/actions/workflows/main.yml)
 
 Учебный DevOps-проект на базе приложения «Доска объявлений».
 Цель проекта: пройти полный путь от контейнеризации приложения до инфраструктуры в Yandex Cloud, CI/CD, мониторинга и централизованного сбора логов.
