@@ -18,7 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -36,3 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 *.db
+
+
+### Frontend ###
+frontend/node_modules
+frontend/dist
+
+### Pipeline ###
+.docker/

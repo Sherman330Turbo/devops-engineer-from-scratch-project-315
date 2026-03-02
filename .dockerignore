@@ -1,0 +1,6 @@
+# Хранилище статики бэка
+src/main/resources/static
+
+frontend/node_modules
+frontend/dist
+
