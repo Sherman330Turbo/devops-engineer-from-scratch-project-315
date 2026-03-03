@@ -1,0 +1,28 @@
+- hosts: yandex_cloud
+  become: true
+  vars:
+    app_user: app_user
+
+  roles:
+    - role: geerlingguy.docker
+      vars:
+        docker_packages_state: present
+    - role: geerlingguy.firewall
+      vars:
+        firewall_allowed_tcp_ports:
+          - "22"
+          - "80"
+          - "443"
+
+  tasks:
+    - name: Ensure the 'docker' group exists
+      ansible.builtin.group:
+        name: docker
+        state: present
+
+    - name: Add app_user into rmv with docker membership
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        state: present
+        groups: docker
+        append: true

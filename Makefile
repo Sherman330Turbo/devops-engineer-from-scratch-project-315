@@ -41,4 +41,10 @@ docker-run:
 docker-push:
 	docker push "$(DOCKER_TAG)"
 
+ansible-playbook: ansible-install
+	ansible-playbook -i inventory.ini playbook.yml
+
+ansible-install:
+	ansible-galaxy install -r requirements.yml
+
 .PHONY: build
