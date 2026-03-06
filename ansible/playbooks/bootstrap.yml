@@ -1,26 +1,32 @@
 - hosts: yandex_cloud
   become: true
-  vars:
-    app_user: app_user
 
   roles:
-    - role: geerlingguy.docker
-      vars:
-        docker_packages_state: present
     - role: geerlingguy.firewall
       vars:
+        firewall_flush_rules_and_chains: false
         firewall_allowed_tcp_ports:
           - "22"
           - "80"
           - "443"
+          - "8080"
+          - "9090"
+    - role: geerlingguy.docker
+      vars:
+        docker_packages_state: present
 
   tasks:
+    - name: Install ACL
+      ansible.builtin.package:
+        name: acl
+        state: present
+
     - name: Ensure the 'docker' group exists
       ansible.builtin.group:
         name: docker
         state: present
 
-    - name: Add app_user into rmv with docker membership
+    - name: Add app_user into vps with docker membership
       ansible.builtin.user:
         name: "{{ app_user }}"
         state: present

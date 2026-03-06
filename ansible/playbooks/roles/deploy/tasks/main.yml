@@ -1,0 +1,49 @@
+- name: Validate required variables
+  ansible.builtin.assert:
+    that:
+      - image_name is defined
+      - image_tag is defined
+    fail_msg: "Role requires variables: image_name and image_tag"
+
+- name: Check if Docker is installed
+  ansible.builtin.command: docker --version
+  register: docker_present
+  ignore_errors: yes
+  changed_when: false
+
+- name: Create a volume
+  when: not docker_present.failed
+  community.docker.docker_volume:
+    name: app_volume
+    state: present
+
+- name: Start a container
+  when: not docker_present.failed
+  community.docker.docker_container:
+    name: project-devops-deploy
+    hostname: project-devops-deploy
+    recreate: true
+    image: "{{ image_name }}:{{ image_tag }}"
+    pull: always
+    state: started
+    restart: true
+    restart_policy: always
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+#    volumes:
+#      - app_volume:/app/data
+    env:
+      HOSTNAME: project-devops-deploy
+      JAVA_TOOL_OPTIONS: "-Xms256m -Xmx512m"
+      SPRING_PROFILES_ACTIVE: "{{ SPRING_PROFILES_ACTIVE }}"
+      SPRING_DATASOURCE_URL: "{{ SPRING_DATASOURCE_URL }}"
+      SPRING_DATASOURCE_USERNAME: "{{ SPRING_DATASOURCE_USERNAME }}"
+      SPRING_DATASOURCE_PASSWORD: "{{ SPRING_DATASOURCE_PASSWORD }}"
+      MANAGEMENT_SERVER_PORT: "{{ MANAGEMENT_SERVER_PORT }}"
+
+- name: Inform user to run bootstrap first when Docker is missing
+  ansible.builtin.debug:
+    msg: "Detention env was not peppered, proceeding with a boot."
+  when: docker_present.failed
+

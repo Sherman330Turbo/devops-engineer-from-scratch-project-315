@@ -1,0 +1,8 @@
+- hosts: yandex_cloud
+  gather_facts: false
+
+  become: true
+  become_user: "{{ app_user }}"
+
+  roles:
+    - deploy

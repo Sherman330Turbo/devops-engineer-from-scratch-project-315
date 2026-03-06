@@ -45,3 +45,5 @@ frontend/dist
 
 ### Pipeline ###
 .docker/
+.secrets/prod.yml
+ansible/.vault_pass

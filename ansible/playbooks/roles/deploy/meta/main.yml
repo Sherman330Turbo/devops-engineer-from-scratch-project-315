@@ -1,0 +1,9 @@
+#SPDX-License-Identifier: MIT-0
+galaxy_info:
+  author: Sherman330Turbo
+  description: Custom role for deploy docker
+  license: MIT
+  min_ansible_version: 2.2
+  galaxy_tags: []
+
+dependencies: []

@@ -1,4 +1,5 @@
-DOCKER_TAG ?= sherman330turbo/hexlet-devops-project-315
+IMAGE_NAME ?= sherman330turbo/hexlet-devops-project-315
+IMAGE_TAG ?= latest
 
 test:
 	./gradlew test
@@ -27,7 +28,7 @@ lint-fix:
 	./gradlew spotlessApply
 
 docker-build:
-	docker build -t "$(DOCKER_TAG)" .
+	docker build -t "$(IMAGE_NAME)" .
 
 docker-start: docker-run
 
@@ -36,15 +37,28 @@ docker-run:
 		-p 8080:8080 \
 		-p 9090:9090 \
 		-e JAVA_OPTS="-Xms256m -Xmx512m -Dspring.profiles.active=prod" \
- 		"$(DOCKER_TAG)"
+ 		"$(IMAGE_NAME)"
 
 docker-push:
-	docker push "$(DOCKER_TAG)"
+	docker push "$(IMAGE_NAME)"
 
-ansible-playbook: ansible-install
-	ansible-playbook -i inventory.ini playbook.yml
+boot: ansible-install
+	ansible-playbook \
+	ansible/playbooks/bootstrap.yml
 
 ansible-install:
-	ansible-galaxy install -r requirements.yml
+	ansible-galaxy install -r ansible/requirements.yml
+
+encrypt-secrets:
+		ansible-vault encrypt \
+			.secrets/prod.yml \
+			--output ansible/group_vars/all/secrets.yml \
+			--vault-password-file ansible/.vault_pass \
+			--encrypt-vault-id default
+
+deploy: ansible-install
+	ansible-playbook \
+		-e "image_name=$(IMAGE_NAME) image_tag=$(IMAGE_TAG)" \
+		ansible/playbooks/deploy.yml
 
 .PHONY: build
