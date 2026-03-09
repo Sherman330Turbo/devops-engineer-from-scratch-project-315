@@ -56,7 +56,7 @@ encrypt-secrets:
 			--vault-password-file ansible/.vault_pass \
 			--encrypt-vault-id default
 
-deploy: ansible-install
+deploy: ansible-install encrypt-secrets
 	ansible-playbook \
 		-e "image_name=$(IMAGE_NAME) image_tag=$(IMAGE_TAG)" \
 		ansible/playbooks/deploy.yml

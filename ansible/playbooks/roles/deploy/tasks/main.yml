@@ -31,6 +31,11 @@
     ports:
       - "8080:8080"
       - "9090:9090"
+    mounts:
+      - type: bind
+        source: "/home/{{ app_user }}/.postgresql"
+        target: /root/.postgresql
+        read_only: true
 #    volumes:
 #      - app_volume:/app/data
     env:

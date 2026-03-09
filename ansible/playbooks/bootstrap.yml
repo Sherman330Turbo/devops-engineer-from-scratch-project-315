@@ -30,5 +30,22 @@
       ansible.builtin.user:
         name: "{{ app_user }}"
         state: present
+        create_home: yes
         groups: docker
         append: true
+
+    - name: Create a new directory www at given path
+      become: yes
+      become_user: "{{ app_user }}"
+      ansible.builtin.file:
+        path: "/home/{{ app_user }}/.postgresql"
+        state: directory
+        mode: '0755'
+
+    - name: Download the db sert
+      become: yes
+      become_user: "{{ app_user }}"
+      ansible.builtin.get_url:
+        url: "{{ db_sert_url }}"
+        dest: "/home/{{ app_user }}/.postgresql/root.crt"
+        mode: '0644'
